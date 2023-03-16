@@ -102,7 +102,7 @@ public class H2Main {
 
     private static void read(Connection connection) {
         try (Statement readItemsStatement = connection.createStatement()) {
-            String readItemsQuery = "SELECT date, currency, multiplier, rate  FROM rates";
+            String readItemsQuery = "SELECT id, title, multiplier, genre, yearOfRelease  FROM MOVIES ";
             ResultSet rs = readItemsStatement.executeQuery(readItemsQuery);
             while (rs.next()) {
                 int id = rs.getInt("id");
