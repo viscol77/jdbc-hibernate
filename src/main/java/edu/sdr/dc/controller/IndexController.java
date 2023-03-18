@@ -23,6 +23,7 @@ public class IndexController {
     @GetMapping(value = "/nbrfxrates.xml", produces = MediaType.APPLICATION_XML_VALUE)
     public String getRatesAsXmlFormat() {
         //call a service which will return rates into XML format.
+
         return "";
     }
 
