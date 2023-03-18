@@ -11,6 +11,8 @@ public class Rate {
     private String date;
     private Integer multiplier;
 
+    public Rate(){}
+
     public Rate(String date, String currency, String rate, Integer multiplier) {
         this.currency = currency;
         this.rate = rate;
@@ -23,5 +25,13 @@ public class Rate {
         this.rate = rate;
         this.date = date;
         this.multiplier = 1;
+    }
+
+    public Rate(Integer id, String date, String currency, String rate, Integer multiplier) {
+        this.id = id;
+        this.currency = currency;
+        this.rate = rate;
+        this.date = date;
+        this.multiplier = multiplier;
     }
 }

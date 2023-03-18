@@ -74,31 +74,34 @@ public class H2Rate {
     private static void insert(Connection connection) {
         try (Statement insertItemStatement = connection.createStatement();) {
 
-            List<Rate> rateList = new LinkedList<>();
-            rateList.add(new Rate("2023-03-17", "AED", "1.2599"));
-            rateList.add(new Rate("2023-03-17", "AUD", "3.0962"));
-            rateList.add(new Rate("2023-03-17", "BGN", "2.5156"));
-            rateList.add(new Rate("2023-03-17", "BRL", "0.8845"));
-            rateList.add(new Rate("2023-03-17", "CAD", "3.3745"));
-            rateList.add(new Rate("2023-03-17", "CHF", "4.9896"));
-            rateList.add(new Rate("2023-03-17", "CNY", "0.6713"));
-            rateList.add(new Rate("2023-03-17", "CZK", "0.2054"));
-            rateList.add(new Rate("2023-03-17", "DKK", "0.6608"));
-            rateList.add(new Rate("2023-03-17", "EGP", "0.1502"));
-            rateList.add(new Rate("2023-03-17", "EUR", "4.9200"));
-            rateList.add(new Rate("2023-03-17", "GBP", "5.6132"));
-            rateList.add(new Rate("2023-03-17", "HUF", "1.2444", 100));
-            rateList.add(new Rate("2023-03-17", "INR", "0.0560"));
-            rateList.add(new Rate("2023-03-17", "JPY", "3.4738", 100));
-            rateList.add(new Rate("2023-03-17", "KRW", "0.3537", 100));
+            for(int date = 10; date < 30; date++) {
+                List<Rate> rateList = new LinkedList<>();
+                String dateString = "2023-03-" + date;
+                rateList.add(new Rate(dateString, "AED", "1.2599"));
+                rateList.add(new Rate(dateString, "AUD", "3.0962"));
+                rateList.add(new Rate(dateString, "BGN", "2.5156"));
+                rateList.add(new Rate(dateString, "BRL", "0.8845"));
+                rateList.add(new Rate(dateString, "CAD", "3.3745"));
+                rateList.add(new Rate(dateString, "CHF", "4.9896"));
+                rateList.add(new Rate(dateString, "CNY", "0.6713"));
+                rateList.add(new Rate(dateString, "CZK", "0.2054"));
+                rateList.add(new Rate(dateString, "DKK", "0.6608"));
+                rateList.add(new Rate(dateString, "EGP", "0.1502"));
+                rateList.add(new Rate(dateString, "EUR", "4.9200"));
+                rateList.add(new Rate(dateString, "GBP", "5.6132"));
+                rateList.add(new Rate(dateString, "HUF", "1.2444", 100));
+                rateList.add(new Rate(dateString, "INR", "0.0560"));
+                rateList.add(new Rate(dateString, "JPY", "3.4738", 100));
+                rateList.add(new Rate(dateString, "KRW", "0.3537", 100));
 
-            for(Rate rate : rateList) {
-                String insertStatement = "INSERT INTO rate (date, currency, rate, multiplier) " +
-                        "VALUES ('" + rate.getDate() + "', " +
-                                  "'" + rate.getCurrency()+ "', " +
-                        "         '" + rate.getRate() + " '," +
-                        "          " + rate.getMultiplier() + ")";
-                insertItemStatement.execute(insertStatement);
+                for(Rate rate : rateList) {
+                    String insertStatement = "INSERT INTO rate (date, currency, rate, multiplier) " +
+                            "VALUES ('" + rate.getDate() + "', " +
+                            "'" + rate.getCurrency()+ "', " +
+                            "         '" + rate.getRate() + " '," +
+                            "          " + rate.getMultiplier() + ")";
+                    insertItemStatement.execute(insertStatement);
+                }
             }
 
         } catch (SQLException e) {
