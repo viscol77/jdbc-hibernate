@@ -1,7 +1,6 @@
 package edu.sdr.dc.jdbc.h2;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.sql.*;
@@ -47,7 +46,7 @@ public class H2Main {
 
     private static void drop(Connection connection) {
         try (Statement dropStatement = connection.createStatement()) {
-            dropStatement.execute("DROP TABLE IF EXISTS MOVIES");
+            dropStatement.execute("DROP TABLE IF EXISTS employee");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -55,11 +54,13 @@ public class H2Main {
 
     private static void create(Connection connection) {
         try (Statement createTableStatement = connection.createStatement()) {
-            String createTableQuery = "CREATE TABLE IF NOT EXISTS MOVIES (" +
+            String createTableQuery = "CREATE TABLE IF NOT EXISTS employee (" +
                     "id INTEGER AUTO_INCREMENT, " +
-                    "title VARCHAR(255), " +
-                    "genre VARCHAR(255), " +
-                    "yearOfRelease INTEGER, " +
+                    "first_name VARCHAR(255), " +
+                    "last_name VARCHAR(255), " +
+                    "job_title VARCHAR(255), " +
+                    "department VARCHAR(255), " +
+                    "hire_year INTEGER, " +
                     "PRIMARY KEY (id))";
             createTableStatement.execute(createTableQuery);
         } catch (SQLException e) {
@@ -69,9 +70,12 @@ public class H2Main {
 
     private static void insert(Connection connection) {
         try (Statement insertItemStatement = connection.createStatement();) {
-            String insertStarWarsQuery = "INSERT INTO MOVIES (title, genre, yearOfRelease) VALUES ('Star Wars', 'Action', 2015)";
-            String insertHarryPotterQuery = "INSERT INTO MOVIES (title, genre, yearOfRelease) VALUES ('Harry Potter', 'Fantasy', 2001)";
-            String insertRockyQuery = "INSERT INTO MOVIES (title, genre, yearOfRelease) VALUES ('Rocky', 'Sports', 1979)";
+            String insertStarWarsQuery = "INSERT INTO employee (first_name, last_name, job_title, department, hire_year) " +
+                    "VALUES ('John', 'King', 'ceo', 'ADMIN', 2000)";
+            String insertHarryPotterQuery = "INSERT INTO employee (first_name, last_name, job_title, department, hire_year) " +
+                    "VALUES ('Matt', 'Green', 'developer', 'IT', 2001)";
+            String insertRockyQuery = "INSERT INTO employee (first_name, last_name, job_title, department, hire_year) " +
+                    "VALUES ('Mary', 'Red', 'tester', 'IT', 2002)";
             insertItemStatement.execute(insertStarWarsQuery);
             insertItemStatement.execute(insertHarryPotterQuery);
             insertItemStatement.execute(insertRockyQuery);
@@ -81,8 +85,8 @@ public class H2Main {
     }
 
     private static void update(Connection connection) {
-        try (PreparedStatement updateStatement = connection.prepareStatement("UPDATE MOVIES SET title = ? WHERE id = ?")) {
-            updateStatement.setString(1, "Star Wars Force Awakens");
+        try (PreparedStatement updateStatement = connection.prepareStatement("UPDATE employee SET job_title = ? WHERE id = ?")) {
+            updateStatement.setString(1, "CTO");
             updateStatement.setInt(2, 1);
 
             updateStatement.executeUpdate();
@@ -93,7 +97,7 @@ public class H2Main {
 
     private static void delete(Connection connection) {
         try (Statement deleteItemStatement = connection.createStatement()) {
-            String deleteItemQuery = "DELETE FROM MOVIES WHERE id = 2";
+            String deleteItemQuery = "DELETE FROM employee WHERE id = 2";
             deleteItemStatement.execute(deleteItemQuery);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -102,19 +106,23 @@ public class H2Main {
 
     private static void read(Connection connection) {
         try (Statement readItemsStatement = connection.createStatement()) {
-            String readItemsQuery = "SELECT id, title, multiplier, genre, yearOfRelease  FROM MOVIES ";
+            String readItemsQuery = "SELECT id, first_name, last_name, job_title, department, hire_year FROM employee";
             ResultSet rs = readItemsStatement.executeQuery(readItemsQuery);
             while (rs.next()) {
                 int id = rs.getInt("id");
-                String title = rs.getString("title");
-                String genre = rs.getString("genre");
-                int yearOfRelease = rs.getInt("yearOfRelease");
+                String firstName = rs.getString("first_name");
+                String lastName = rs.getString("last_name");
+                String jobTitle = rs.getString("job_title");
+                String department = rs.getString("department");
+                int hireYear = rs.getInt("hire_year");
 
                 System.out.println("#####################");
                 System.out.println("Id: " + id);
-                System.out.println("Title: " + title);
-                System.out.println("Genre: " + genre);
-                System.out.println("Year of release: " + yearOfRelease);
+                System.out.println("First name: " + firstName);
+                System.out.println("Last name: " + lastName);
+                System.out.println("Job title: " + jobTitle);
+                System.out.println("Department: " + department);
+                System.out.println("Hire year: " + hireYear);
             }
         } catch (SQLException e) {
             e.printStackTrace();
