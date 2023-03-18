@@ -62,7 +62,7 @@ public class H2Rate {
                     "                    id INTEGER AUTO_INCREMENT, \n" +
                     "                    currency VARCHAR(255), \n" +
                     "                    date VARCHAR(255),\n" +
-                    "                    rate INTEGER, \n" +
+                    "                    rate VARCHAR(255), \n" +
                     "                    multiplier INTEGER, \n" +
                     "                    PRIMARY KEY (id));\n";
             createTableStatement.execute(createTableQuery);
