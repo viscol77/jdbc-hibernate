@@ -1,31 +1,39 @@
 package edu.sdr.dc.jdbc;
 
-import edu.sdr.dc.model.Rate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.sql.*;
-import java.util.LinkedList;
-import java.util.List;
 
 @Slf4j
 @SpringBootApplication
-public class H2Rate {
+public class MySqlMain {
 
     private static final String H2_DRIVER = "org.h2.Driver";
     private static final String H2_DB_URL = "jdbc:h2:file:./data/db";
     private static final String H2_DB_USER = "sa";
     private static final String H2_DB_PASSWORD = "password";
 
+    private static final String MYSQL_DRIVER = "com.mysql.cj.jdbc.Driver";
+    private static final String MYSQL_DB_URL = "jdbc:mysql://localhost:3306/employee_gr_51";
+    private static final String MYSQL_DB_USER = "root";
+    private static final String MYSQL_DB_PASSWORD = "root";
+
+    private static final String ORACLE_DRIVER = "com.ORACLE.jdbc.Driver";
+    private static final String ORACLE_DB_URL = "jdbc:mysql://127.0.0.1:1521/employee_gr_51";
+    private static final String ORACLE_DB_USER = "root";
+    private static final String ORACLE_DB_PASSWORD = "root";
+
+
     public static void main(String[] args) {
         try {
-            useH2();
+            useMySQL();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    private static void useH2() throws ClassNotFoundException {
+    private static void useMySQL() throws ClassNotFoundException {
         useDatabase(H2_DRIVER, H2_DB_URL, H2_DB_USER, H2_DB_PASSWORD);
     }
 
@@ -34,16 +42,12 @@ public class H2Rate {
 
         try (Connection connection = DriverManager.getConnection(url, user, password)) {
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private static void createConnection(String driver, String url, String user, String password) throws ClassNotFoundException {
-        Class.forName(driver);
-
-        try (Connection connection = DriverManager.getConnection(url, user, password)) {
+            drop(connection);
+            create(connection);
+            insert(connection);
+            update(connection);
+            delete(connection);
+            read(connection);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -52,7 +56,7 @@ public class H2Rate {
 
     private static void drop(Connection connection) {
         try (Statement dropStatement = connection.createStatement()) {
-            dropStatement.execute("DROP TABLE IF EXISTS rate");
+            dropStatement.execute("DROP TABLE IF EXISTS employee");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -60,13 +64,14 @@ public class H2Rate {
 
     private static void create(Connection connection) {
         try (Statement createTableStatement = connection.createStatement()) {
-            String createTableQuery = "CREATE TABLE IF NOT EXISTS rate (\n" +
-                    "                    id INTEGER AUTO_INCREMENT, \n" +
-                    "                    currency VARCHAR(255), \n" +
-                    "                    date VARCHAR(255),\n" +
-                    "                    rate VARCHAR(255), \n" +
-                    "                    multiplier INTEGER, \n" +
-                    "                    PRIMARY KEY (id));\n";
+            String createTableQuery = "CREATE TABLE IF NOT EXISTS employee (" +
+                    "id INTEGER AUTO_INCREMENT, " +
+                    "first_name VARCHAR(255), " +
+                    "last_name VARCHAR(255), " +
+                    "job_title VARCHAR(255), " +
+                    "department VARCHAR(255), " +
+                    "hire_year INTEGER, " +
+                    "PRIMARY KEY (id))";
             createTableStatement.execute(createTableQuery);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -75,37 +80,15 @@ public class H2Rate {
 
     private static void insert(Connection connection) {
         try (Statement insertItemStatement = connection.createStatement();) {
-
-            for(int date = 10; date < 30; date++) {
-                List<Rate> rateList = new LinkedList<>();
-                String dateString = "2023-03-" + date;
-                rateList.add(new Rate(dateString, "AED", "1.2599"));
-                rateList.add(new Rate(dateString, "AUD", "3.0962"));
-                rateList.add(new Rate(dateString, "BGN", "2.5156"));
-                rateList.add(new Rate(dateString, "BRL", "0.8845"));
-                rateList.add(new Rate(dateString, "CAD", "3.3745"));
-                rateList.add(new Rate(dateString, "CHF", "4.9896"));
-                rateList.add(new Rate(dateString, "CNY", "0.6713"));
-                rateList.add(new Rate(dateString, "CZK", "0.2054"));
-                rateList.add(new Rate(dateString, "DKK", "0.6608"));
-                rateList.add(new Rate(dateString, "EGP", "0.1502"));
-                rateList.add(new Rate(dateString, "EUR", "4.9200"));
-                rateList.add(new Rate(dateString, "GBP", "5.6132"));
-                rateList.add(new Rate(dateString, "HUF", "1.2444", 100));
-                rateList.add(new Rate(dateString, "INR", "0.0560"));
-                rateList.add(new Rate(dateString, "JPY", "3.4738", 100));
-                rateList.add(new Rate(dateString, "KRW", "0.3537", 100));
-
-                for(Rate rate : rateList) {
-                    String insertStatement = "INSERT INTO rate (date, currency, rate, multiplier) " +
-                            "VALUES ('" + rate.getDate() + "', " +
-                            "'" + rate.getCurrency()+ "', " +
-                            "         '" + rate.getRate() + " '," +
-                            "          " + rate.getMultiplier() + ")";
-                    insertItemStatement.execute(insertStatement);
-                }
-            }
-
+            String insertStarWarsQuery = "INSERT INTO employee (first_name, last_name, job_title, department, hire_year) " +
+                    "VALUES ('John', 'King', 'ceo', 'ADMIN', 2000)";
+            String insertHarryPotterQuery = "INSERT INTO employee (first_name, last_name, job_title, department, hire_year) " +
+                    "VALUES ('Matt', 'Green', 'developer', 'IT', 2001)";
+            String insertRockyQuery = "INSERT INTO employee (first_name, last_name, job_title, department, hire_year) " +
+                    "VALUES ('Mary', 'Red', 'tester', 'IT', 2002)";
+            insertItemStatement.execute(insertStarWarsQuery);
+            insertItemStatement.execute(insertHarryPotterQuery);
+            insertItemStatement.execute(insertRockyQuery);
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -9,11 +9,7 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
-public class RateRepository {
-
-    public Rate findById(Integer id) {
-        return new Rate();
-    }
+public class RateRepository implements Repository<Rate> {
 
     public List<Rate> findAllByDate(Connection connection, String date) {
         List<Rate> rateList = new LinkedList<>();
@@ -39,4 +35,23 @@ public class RateRepository {
         return rateList;
     }
 
+    @Override
+    public Rate findById(Integer id) {
+        return null;
+    }
+
+    @Override
+    public Rate updateById(Integer id, String rate, String date) {
+        return null;
+    }
+
+    @Override
+    public boolean deleteById(Integer id) {
+        return false;
+    }
+
+    @Override
+    public Rate save(Integer id, String currency, String rate, String date, Integer multiplier) {
+        return null;
+    }
 }
